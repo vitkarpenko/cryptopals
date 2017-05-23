@@ -1,5 +1,10 @@
+"""Fixed XOR.
+"""
+
+
 def buffers_xor(buffer1, buffer2):
-    """buffer1, buffer2: byte-like objects."""
+    """buffer1, buffer2: byte-like objects.
+    """
     try:
         return bytes(b1 ^ b2 for b1, b2 in zip(buffer1, buffer2))
     except TypeError:
