@@ -33,6 +33,7 @@ with open(os.path.join('data', 'book.txt')) as book:
             character.lower() for character in line
             if character in string.ascii_letters
         )
+print(book_counter.most_common(10))
 
 cipher_key_ranking = dict()
 for cipher_key in range(256):
@@ -42,7 +43,13 @@ for cipher_key in range(256):
         book_counter, decrypted_string_counter
     )
 
-best_cipher_key = max(cipher_key_ranking.items(),
-                      key=operator.itemgetter(1))[0]
+maximum_frequency_likeness = max(cipher_key_ranking.values())
 
-print(generate_decrypted_string(best_cipher_key))
+best_cipher_keys = [
+    key
+    for key, value in cipher_key_ranking.items()
+    if value == maximum_frequency_likeness
+]
+
+for key in best_cipher_keys:
+    print(generate_decrypted_string(key))
