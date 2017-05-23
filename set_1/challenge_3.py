@@ -13,7 +13,8 @@ ENCODED_STRING = ('1b37373331363f78151b7f2b783431333d'
 def calculate_frequency_difference(counter1, counter2):
     """Finds how many most frequent keys match.
     """
-    return sum(1 for c1, c2 in zip(counter1, counter2) if c1 == c2)
+    return sum(1 for c1, c2 in zip(counter1.most_common(),
+                                   counter2.most_common()) if c1 == c2)
 
 
 def generate_decrypted_string(cipher_key):
@@ -39,6 +40,7 @@ for cipher_key in range(256):
     cipher_key_ranking[cipher_key] = calculate_frequency_difference(
         book_counter, decrypted_string_counter
     )
+
 minimum_frequency_difference = min(cipher_key_ranking,
                                    key=cipher_key_ranking.get)
 best_cipher_key = cipher_key_ranking[minimum_frequency_difference]
