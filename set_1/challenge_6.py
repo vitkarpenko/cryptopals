@@ -4,7 +4,9 @@
 import base64
 from collections import Counter
 import os
-import string
+
+
+KEY_LENGTH_DELTA = 0.1
 
 
 def compute_coincidence_index(buffer):
@@ -20,6 +22,9 @@ def compute_coincidence_index(buffer):
 
 
 def compute_cipher_key_IC(buffer, key_length):
+    """IC stands for 'index of coincidence'.
+    https://en.wikipedia.org/wiki/Index_of_coincidence
+    """
     columns = [
         buffer[i::key_length]
         for i in range(key_length)
@@ -30,7 +35,23 @@ def compute_cipher_key_IC(buffer, key_length):
     )
 
 
-with open(os.path.join('data', 'challenge_6.txt')) as data:
-    data = base64.b64decode(data.read())
-for k in range(2, 40):
-    print(compute_cipher_key_IC(data, k))
+def find_best_cipher_key_lengths(buffer):
+    """For english optimal IC is ~1.73."""
+    key_ICs = dict()
+    for key_length in range(2, 40):
+        key_ICs[key_length] = compute_cipher_key_IC(buffer, key_length)
+    return [
+        key_length
+        for key_length, key_IC in key_ICs.items()
+        if abs(key_IC - 1.73) / 1.73 < KEY_LENGTH_DELTA
+    ]
+
+
+def main():
+    with open(os.path.join('data', 'challenge_6.txt')) as data:
+        data = base64.b64decode(data.read())
+    print(find_best_cipher_key_lengths(data))
+
+
+if __name__ == '__main__':
+    main()
